@@ -1,11 +1,27 @@
-Front-end: 
-    JavaScript
+# Informações do Projeto
+
+## Tecnologias
+
+### Front-end
+
+    TypeScript
     Tailwind CSS
     React
-    Next
+    Next.js
 
-Ideia do projeto:
+### Backend
+
+    Python
+    FastAPI
+    PostgreSQL
+
+## Ideia do projeto
+
     Criar um agregador de noticias relacionadas ao meio ambiente e sustentabilidade.
 
-Funcionalidades:
-    Curtir notícias.
+## Funcionalidades
+
+- Curtir notícias.
+- Compartilhar notícias.
+- Histórico de notícias curtidas.
+
