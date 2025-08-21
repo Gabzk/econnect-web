@@ -1,0 +1,3 @@
+Nome = Artur Aureliano Borges
+Username = github.com/arturaureliano
+Função = Desenvolvedor Back-end
