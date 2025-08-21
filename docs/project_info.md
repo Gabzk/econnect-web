@@ -5,4 +5,7 @@ Front-end:
     Next
 
 Ideia do projeto:
-    Site de tracking de tarefas com sistema gamificado de recompensas.
+    Criar um agregador de noticias relacionadas ao meio ambiente e sustentabilidade.
+
+Funcionalidades:
+    Curtir notícias.
