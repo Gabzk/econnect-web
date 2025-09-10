@@ -1,0 +1,295 @@
+/* Landing Page Dark - Versão mais suave para os olhos */
+
+:root {
+  /* Cores escuras e suaves */
+  --primary-dark: #1a1a1a;
+  --primary-soft: #2d4a3e;
+  --primary-soft-light: #3a5a4e;
+  --primary-soft-dark: #1f3529;
+  --bg-dark: #121212;
+  --bg-secondary: #1e1e1e;
+  --text-light: #e8e8e8;
+  --text-light-muted: #c0c0c0;
+  --border-soft: rgba(77, 119, 95, 0.3);
+  --shadow-soft: rgba(0, 0, 0, 0.3);
+  
+  /* Fonte */
+  --bs-body-font-family: "Montserrat", system-ui, -apple-system, "Segoe UI",
+    Roboto, Arial, sans-serif;
+}
+
+body {
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  font-weight: 400;
+  background-color: var(--bg-dark) !important;
+  color: var(--text-light) !important;
+}
+
+/* Reduz o brilho geral para ser mais suave aos olhos */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (max-width: 576px) {
+  img {
+    max-height: 40vh !important;
+  }
+}
+
+/* Refinamento tipográfico */
+h1, h2, h3, h4, .h1, .h2, .h3 { 
+  font-weight: 600;
+  color: var(--text-light);
+}
+strong, b { 
+  font-weight: 600; 
+  color: var(--text-light);
+}
+
+/* Classes customizadas para dark theme */
+.bg-primary-dark {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--bg-secondary) 100%) !important;
+}
+
+.bg-primary-soft {
+  background: linear-gradient(135deg, var(--primary-soft) 0%, var(--primary-soft-dark) 100%) !important;
+}
+
+.text-primary-soft {
+  color: var(--primary-soft-light) !important;
+}
+
+.text-light-muted {
+  color: var(--text-light-muted) !important;
+}
+
+/* Botões dark theme */
+.btn-primary-soft {
+  background: linear-gradient(135deg, var(--primary-soft) 0%, var(--primary-soft-light) 100%);
+  border: none;
+  color: var(--text-light);
+  transition: all .3s ease;
+  box-shadow: 0 4px 15px rgba(45, 74, 62, 0.3);
+}
+
+.btn-primary-soft:hover {
+  background: linear-gradient(135deg, var(--primary-soft-light) 0%, var(--primary-soft) 100%);
+  color: var(--text-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(45, 74, 62, 0.4);
+}
+
+.btn-outline-primary-soft {
+  background: transparent;
+  border: 2px solid var(--primary-soft);
+  color: var(--primary-soft-light);
+  transition: all .3s ease;
+}
+
+.btn-outline-primary-soft:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary-soft);
+  color: var(--text-light);
+  transform: translateY(-2px);
+}
+
+.btn-light-custom {
+  background: var(--text-light);
+  border: none;
+  color: var(--primary-soft);
+  font-weight: 600;
+  transition: all .3s ease;
+}
+
+.btn-light-custom:hover {
+  background: var(--text-light-muted);
+  color: var(--primary-soft-dark);
+  transform: translateY(-1px);
+}
+
+/* Cards das fontes - theme escuro */
+.source-card-dark {
+  background: var(--bg-secondary);
+  border-radius: 15px;
+  padding: 1.5rem 1rem;
+  transition: all .3s ease;
+  border: 1px solid var(--border-soft);
+}
+
+.source-card-dark:hover {
+  background: var(--primary-soft);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px var(--shadow-soft);
+}
+
+.source-card-dark h5 {
+  color: var(--text-light);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+/* Filtros para as imagens ficarem mais suaves */
+.source-logo-filter {
+  filter: brightness(0.9) contrast(0.9) saturate(0.8);
+  transition: filter .3s ease;
+}
+
+.source-card-dark:hover .source-logo-filter {
+  filter: brightness(1.1) contrast(1) saturate(1);
+}
+
+.mascot-filter {
+  filter: brightness(0.95) contrast(0.95);
+}
+
+/* FAQ dark theme */
+.faq-section-dark .accordion-item-dark {
+  border: 1px solid var(--border-soft);
+  border-radius: .75rem;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  transition: border-color .25s ease;
+  margin-bottom: 1rem;
+}
+
+.faq-section-dark .accordion-button-dark {
+  font-weight: 500;
+  transition: background-color .3s ease, color .3s ease;
+  box-shadow: none;
+  background: var(--bg-secondary);
+  color: var(--text-light);
+  border: none;
+}
+
+.faq-section-dark .accordion-button-dark.collapsed {
+  background: var(--bg-secondary);
+  color: var(--text-light-muted);
+}
+
+.faq-section-dark .accordion-button-dark:not(.collapsed) {
+  background: var(--primary-soft);
+  color: var(--text-light);
+}
+
+.faq-section-dark .accordion-button-dark:focus { 
+  box-shadow: 0 0 0 .25rem rgba(45, 74, 62, 0.25); 
+}
+
+.faq-section-dark .accordion-body-dark { 
+  color: var(--text-light-muted); 
+  line-height: 1.55;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-soft);
+}
+
+.faq-section-dark .accordion-item-dark:hover { 
+  border-color: var(--primary-soft); 
+}
+
+/* Seção de contato dark */
+.contact-dark {
+  background: var(--bg-secondary);
+}
+
+/* Formulários dark theme */
+.form-control-dark {
+  background: var(--bg-dark);
+  border: 2px solid var(--border-soft);
+  color: var(--text-light);
+  transition: all .3s ease;
+}
+
+.form-control-dark:focus {
+  background: var(--bg-dark);
+  border-color: var(--primary-soft);
+  color: var(--text-light);
+  box-shadow: 0 0 0 .2rem rgba(45, 74, 62, 0.25);
+}
+
+.form-control-dark::placeholder {
+  color: var(--text-light-muted);
+  opacity: 0.7;
+}
+
+/* Labels dos formulários */
+.form-label {
+  color: var(--text-light) !important;
+  font-weight: 500;
+}
+
+/* Links */
+a {
+  color: var(--primary-soft-light);
+  transition: color .3s ease;
+}
+
+a:hover {
+  color: var(--text-light);
+}
+
+/* HRs mais suaves */
+hr {
+  border-color: var(--border-soft) !important;
+  opacity: 0.3 !important;
+}
+
+/* Footer links */
+footer a {
+  transition: opacity .3s ease;
+}
+
+footer a:hover {
+  opacity: 1 !important;
+  color: var(--text-light) !important;
+}
+
+/* Scrollbar personalizada para dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-soft);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-soft-light);
+}
+
+/* Seleção de texto */
+::selection {
+  background: var(--primary-soft);
+  color: var(--text-light);
+}
+
+/* Melhorias para acessibilidade em dark mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: var(--bg-dark) !important;
+  }
+}
+
+/* Reduz a intensidade das transições para pessoas sensíveis */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.1s !important;
+    animation-duration: 0.1s !important;
+  }
+}
+
+/* Ajustes para telas pequenas */
+@media (max-width: 768px) {
+  .source-card-dark {
+    padding: 1rem 0.5rem;
+  }
+  
+  .source-card-dark h5 {
+    font-size: 0.8rem;
+  }
+}
