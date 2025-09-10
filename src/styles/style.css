@@ -1,5 +1,13 @@
+:root {
+  --bs-body-font-family: "Montserrat", system-ui, -apple-system, "Segoe UI",
+    Roboto, Arial, sans-serif;
+  --success-border-alpha: rgba(25, 135, 84, 0.25);
+}
+
 body {
-    background-color: #FEFAE0 !important;
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  font-weight: 400;
+  background-color: #fefae0 !important;
 }
 
 @media (max-width: 576px) {
@@ -7,3 +15,33 @@ body {
     max-height: 40vh !important; /* menor em celular */
   }
 }
+
+/* Refino tipografia */
+h1, h2, h3, h4, .h1, .h2, .h3 { font-weight: 600; }
+strong, b { font-weight: 600; }
+
+/* FAQ custom theme */
+.faq-section .accordion-item {
+  border: 1px solid var(--success-border-alpha);
+  border-radius: .75rem;
+  overflow: hidden;
+  background: #fff;
+  transition: border-color .25s ease;
+}
+.faq-section .accordion-item + .accordion-item { margin-top: 1rem; }
+.faq-section .accordion-button {
+  font-weight: 500;
+  transition: background-color .3s ease, color .3s ease;
+  box-shadow: none;
+}
+.faq-section .accordion-button.collapsed {
+  background: #fff;
+  color: #198754;
+}
+.faq-section .accordion-button:not(.collapsed) {
+  background: #198754;
+  color: #fff;
+}
+.faq-section .accordion-button:focus { box-shadow: 0 0 0 .25rem var(--success-border-alpha); }
+.faq-section .accordion-body { color: #198754; line-height: 1.55; }
+.faq-section .accordion-item:hover { border-color: #198754; }
