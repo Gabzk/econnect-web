@@ -200,7 +200,25 @@
         </section>
     </main>
 
+    <footer class="bg-success text-white py-4">
+        <div class="container small d-flex flex-column flex-md-row justify-content-between gap-3">
+            <div>
+                <strong>Econnect</strong> &copy; <span id="year"></span> • Notícias ambientais confiáveis.
+            </div>
+            <div class="d-flex flex-wrap gap-3">
+                <a href="#inicio" class="text-white text-decoration-none">Início</a>
+                <a href="#fontes" class="text-white text-decoration-none">Fontes</a>
+                <a href="#faq" class="text-white text-decoration-none">FAQ</a>
+                <a href="#contato" class="text-white text-decoration-none">Contato</a>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Atualiza ano automaticamente no footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 </body>
 
 </html>
