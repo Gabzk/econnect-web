@@ -18,6 +18,10 @@
     Roboto, Arial, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif !important;
   font-weight: 400;
@@ -190,6 +194,7 @@ strong, b {
 /* Seção de contato dark */
 .contact-dark {
   background: var(--bg-secondary);
+  scroll-margin-top: 80px;
 }
 
 /* Formulários dark theme */
