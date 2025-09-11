@@ -233,6 +233,13 @@ a:hover {
   color: var(--text-light);
 }
 
+/* Theme toggle icon */
+.theme-toggle svg { display: block; }
+.theme-toggle { line-height: 0; }
+@media (max-width: 576px) {
+  header .container.d-flex { gap: .75rem; }
+}
+
 /* HRs mais suaves */
 hr {
   border-color: var(--border-soft) !important;
