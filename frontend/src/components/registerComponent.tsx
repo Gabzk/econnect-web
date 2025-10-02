@@ -54,20 +54,17 @@ export default function RegisterComponent() {
 
     setIsLoading(true);
 
-    await axios
-      .post("/api/register", { name, email, password })
-      .then((response) => {
-        console.log("Cadastro realizado com sucesso:", response.data);
-        // Redirecionar para login ou dashboard
-      })
-      .catch((error) => {
-        console.error("Erro no cadastro:", error);
-        // Tratar erros de cadastro aqui
-        setErrors({ email: "Erro ao criar conta. Tente novamente." });
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const response = await axios.post("/api/register", { name, email, password });
+      console.log("Cadastro realizado com sucesso:", response.data);
+      // Redirecionar para login ou dashboard
+    } catch (error) {
+      console.error("Erro no cadastro:", error);
+      // Tratar erros de cadastro aqui
+      setErrors({ email: "Erro ao criar conta. Tente novamente." });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
