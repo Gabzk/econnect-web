@@ -40,19 +40,16 @@ export default function LoginComponent() {
 
     setIsLoading(true);
 
-    await axios
-      .post("/api/login", { email, password })
-      .then((response) => {
-        console.log("Login bem-sucedido:", response.data);
-        // Redirecionar ou tualizar o estado do usuário aqui
-      })
-      .catch((error) => {
-        console.error("Erro no login:", error);
-        // Tratar erros de autenticação aqui
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const response = await axios.post("/api/login", { email, password });
+      console.log("Login bem-sucedido:", response.data);
+      // Redirecionar ou tualizar o estado do usuário aqui
+    } catch (error) {
+      console.error("Erro no login:", error);
+      // Tratar erros de autenticação aqui
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
