@@ -55,7 +55,11 @@ export default function RegisterComponent() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("/api/register", { name, email, password });
+      const response = await axios.post("/api/register", {
+        name,
+        email,
+        password,
+      });
       console.log("Cadastro realizado com sucesso:", response.data);
       // Redirecionar para login ou dashboard
     } catch (error) {

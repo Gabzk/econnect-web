@@ -1,10 +1,13 @@
 "use client";
 
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import InputComponent from "./inputComponent";
 
 export default function LoginComponent() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
@@ -41,9 +44,11 @@ export default function LoginComponent() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("/api/login", { email, password });
-      console.log("Login bem-sucedido:", response.data);
+      // const response = await axios.post("/api/login", { email, password }); temporariamente desativado até o backend estar pronto
+      // console.log("Login bem-sucedido:", response.data);
       // Redirecionar ou tualizar o estado do usuário aqui
+
+      router.replace("/dashboard"); // Redirecionar para a dashboard após o login
     } catch (error) {
       console.error("Erro no login:", error);
       // Tratar erros de autenticação aqui
