@@ -1,8 +1,11 @@
-import NavBarComponent from "@/components/navBarComponent"; 
+import HomeComponent from "@/components/homeComponent";
+import NavBarComponent from "@/components/navBarComponent";
 
 export default function FeedPage() {
-  return <div>
-    <NavBarComponent />
-
-  </div>;
-} 
+  return (
+    <div>
+      <NavBarComponent />
+      <HomeComponent />
+    </div>
+  );
+}
