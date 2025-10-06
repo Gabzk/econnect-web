@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function NavBarComponent() {
   return (
     <nav className="bg-emerald-800">
@@ -7,7 +9,7 @@ export default function NavBarComponent() {
           <ul className="flex items-center gap-8 font-medium">
             <li>
               <a
-                href="#"
+                href="/feed"
                 className="text-white transition-colors hover:text-amber-100"
                 aria-current="page"
               >
@@ -16,7 +18,7 @@ export default function NavBarComponent() {
             </li>
             <li>
               <a
-                href="#"
+                href="/feed"
                 className="text-emerald-200 transition-colors hover:text-amber-100"
               >
                 Mais Recentes
@@ -24,7 +26,7 @@ export default function NavBarComponent() {
             </li>
             <li>
               <a
-                href="#"
+                href="/feed"
                 className="text-emerald-200 transition-colors hover:text-amber-100"
               >
                 Mais Curtidas
@@ -47,6 +49,7 @@ export default function NavBarComponent() {
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
+              <title>Menu</title>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -62,10 +65,12 @@ export default function NavBarComponent() {
             className="rounded-full focus:outline-none focus:ring-4 focus:ring-emerald-600"
             aria-label="User menu"
           >
-            <img
+            <Image
               className="h-10 w-10 rounded-full ring-2 ring-emerald-600"
               src="/docs/images/people/profile-picture-3.jpg"
               alt="User profile"
+              width={40}
+              height={40}
             />
           </button>
         </div>
@@ -76,7 +81,7 @@ export default function NavBarComponent() {
         <ul className="space-y-1 p-4">
           <li>
             <a
-              href="#"
+              href="/"
               className="block rounded-lg px-4 py-2 text-white hover:bg-emerald-700"
             >
               Home
@@ -84,7 +89,7 @@ export default function NavBarComponent() {
           </li>
           <li>
             <a
-              href="#"
+              href="/feed"
               className="block rounded-lg px-4 py-2 text-emerald-200 hover:bg-emerald-700"
             >
               Mais Recentes
@@ -92,7 +97,7 @@ export default function NavBarComponent() {
           </li>
           <li>
             <a
-              href="#"
+              href="/feed"
               className="block rounded-lg px-4 py-2 text-emerald-200 hover:bg-emerald-700"
             >
               Mais Curtidas
