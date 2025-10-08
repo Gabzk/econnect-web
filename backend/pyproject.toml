@@ -1,0 +1,44 @@
+[project]
+name = "econnect-api"
+version = "0.1.0"
+description = "API do Econnect"
+authors = [
+    {name = "Gabriel Alves",email = "gabrielrodriguesalves693@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "fastapi (>=0.115.12,<0.116.0)",
+    "uvicorn (>=0.34.2,<0.35.0)",
+    "sqlalchemy (>=2.0.41,<3.0.0)",
+    "psycopg2-binary (>=2.9.10,<3.0.0)",
+    "dotenv (>=0.9.9,<0.10.0)",
+    "python-jose[cryptography] (>=3.4.0,<4.0.0)",
+    "passlib[argon2] (>=1.7.4,<2.0.0)",
+    "pydantic[email] (>=2.11.4,<3.0.0)",
+    "feedparser (>=6.0.11,<7.0.0)",
+    "bs4 (>=0.0.2,<0.0.3)",
+    "spacy (>=3.8.7,<4.0.0)",
+    "pt-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/pt_core_news_sm-3.8.0/pt_core_news_sm-3.8.0-py3-none-any.whl",
+    "python-dateutil (>=2.9.0.post0,<3.0.0)",
+    "apscheduler (>=3.11.0,<4.0.0)",
+    "httpx (>=0.28.1,<0.29.0)",
+    "python-multipart (>=0.0.20,<0.0.21)",
+]
+
+[tool.poetry]
+name = "econnect-api"
+packages = [{ include = "src" }]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+alembic = "^1.15.2"
+httpx = "^0.28.1"
+pytest-asyncio = "^1.0.0"
+

@@ -1,0 +1,43 @@
+name: Deploy API na Oracle Cloud
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código 
+        uses: actions/checkout@v4
+
+      - name: Configurar chave SSH
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: unnecessary
+          if_key_exists: replace
+
+      - name: Add to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.INSTANCE_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via SSH
+        env:
+          INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
+          INSTANCE_USER: ${{ secrets.INSTANCE_USER }}
+        run: |
+          ssh $INSTANCE_USER@$INSTANCE_IP << 'EOF'
+            cd ~/econnect-api
+            git reset --hard HEAD
+            git clean -fd
+            git pull origin main
+            git pull origin main
+            source ~/.poetry/env
+            poetry install
+            sudo systemctl restart econnect-api
+            echo "Deploy completed"
+          EOF
