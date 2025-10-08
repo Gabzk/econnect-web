@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import InputComponent from "./inputComponent";
+import axios from "axios";
 
 export default function LoginComponent() {
   const router = useRouter();
@@ -43,11 +44,13 @@ export default function LoginComponent() {
     setIsLoading(true);
 
     try {
-      // const response = await axios.post("/api/login", { email, password }); temporariamente desativado até o backend estar pronto
-      // console.log("Login bem-sucedido:", response.data);
-      // Redirecionar ou tualizar o estado do usuário aqui
+      const res = await axios.post("/api/auth/login", {
+        email,
+        senha: password,
+      });
 
-      router.replace("/dashboard"); // Redirecionar para a dashboard após o login
+      console.log("Login bem-sucedido:", res.data);
+      router.push("/feed"); // Redirecionar para a feed após o login
     } catch (error) {
       console.error("Erro no login:", error);
       // Tratar erros de autenticação aqui
