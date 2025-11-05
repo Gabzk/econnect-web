@@ -10,7 +10,7 @@ export default function LoginComponent() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>(
     {},
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +42,7 @@ export default function LoginComponent() {
     if (!validateForm()) return;
 
     setIsLoading(true);
+    setErrors({}); // Limpar erros anteriores
 
     try {
       const res = await axios.post("/api/auth/login", {
@@ -51,9 +52,13 @@ export default function LoginComponent() {
 
       console.log("Login bem-sucedido:", res.data);
       router.push("/feed"); // Redirecionar para a feed após o login
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro no login:", error);
-      // Tratar erros de autenticação aqui
+      
+      // Pegar a mensagem de erro do backend
+      const errorMessage = error.response?.data?.error || error.response?.data?.detail || "Erro ao fazer login. Tente novamente.";
+      
+      setErrors({ general: errorMessage });
     } finally {
       setIsLoading(false);
     }
@@ -83,6 +88,12 @@ export default function LoginComponent() {
         error={errors.password}
         disabled={isLoading}
       />
+
+      {errors.general && (
+        <div className="w-full p-3 bg-red-100 border border-red-400 text-red-700 rounded-md text-sm">
+          {errors.general}
+        </div>
+      )}
 
       <button
         type="submit"
