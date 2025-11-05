@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import axios from "axios";
+import { NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.BACKEND_URL;
 const API_KEY = process.env.API_KEY;
