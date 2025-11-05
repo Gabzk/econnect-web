@@ -1,10 +1,13 @@
 "use client";
 
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import InputComponent from "./inputComponent";
 
 export default function RegisterComponent() {
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,8 +15,10 @@ export default function RegisterComponent() {
     name?: string;
     email?: string;
     password?: string;
+    general?: string;
   }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [registered, setRegistered] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: {
@@ -55,14 +60,30 @@ export default function RegisterComponent() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("/api/register", { name, email, password });
+      const response = await axios.post("/api/auth/register", {
+        name,
+        email,
+        password,
+      });
       console.log("Cadastro realizado com sucesso:", response.data);
-      // Redirecionar para login ou dashboard
-    } catch (error) {
+      setRegistered(true);
+      router.push("/login");
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { error?: string; detail?: string } };
+      };
       console.error("Erro no cadastro:", error);
-      // Tratar erros de cadastro aqui
-      setErrors({ email: "Erro ao criar conta. Tente novamente." });
-    } finally {
+      // Pegar a mensagem de erro do backend
+      const resolveErrorMessage = (error: {
+        response?: { data?: { error?: string; detail?: string } };
+      }): string => {
+        if (error?.response?.data?.error) return error.response.data.error;
+        if (error?.response?.data?.detail) return error.response.data.detail;
+        return "Erro ao fazer registro. Tente novamente.";
+      };
+      const errorMessage = resolveErrorMessage(err);
+
+      setErrors({ general: errorMessage });
       setIsLoading(false);
     }
   };
@@ -101,6 +122,18 @@ export default function RegisterComponent() {
         error={errors.password}
         disabled={isLoading}
       />
+
+      {errors.general && (
+        <div className="w-full p-3 bg-red-100 border border-red-400 text-red-700 rounded-md text-sm">
+          {errors.general}
+        </div>
+      )}
+
+      {registered && (
+        <div className="w-full p-3 bg-green-100 border border-green-400 text-green-700 rounded-md text-sm">
+          Cadastro realizado com sucesso! Redirecionando para o login...
+        </div>
+      )}
 
       <button
         type="submit"

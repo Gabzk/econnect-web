@@ -1,0 +1,66 @@
+# tests/test_auth_router.py
+import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+# Importe 'app' de src.main e a classe do seu middleware
+from src.main import app
+from src.middlewares.rate_limit_middleware import RateLimitMiddleware # Certifique-se que o caminho está correto
+
+from src.db.database import Base, get_db
+from src.auth.api_key import verify_api_key
+# ... outras importações ...
+
+# Configuração do banco de dados de teste (como você já tem)
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test_auth.db"
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Sobrescrever dependências (como você já tem)
+def override_get_db():
+    try:
+        db = TestingSessionLocal()
+        yield db
+    finally:
+        db.close()
+
+async def override_verify_api_key():
+    return True
+
+app.dependency_overrides[get_db] = override_get_db
+app.dependency_overrides[verify_api_key] = override_verify_api_key
+
+
+# --- MODIFICAÇÃO DA APP PARA TESTES ---
+# Remova o RateLimitMiddleware da instância 'app' importada.
+# Isso deve ser feito ANTES que o TestClient seja inicializado.
+
+# Filtra a lista de middlewares para excluir o RateLimitMiddleware
+filtered_user_middleware = [
+    m for m in app.user_middleware if m.cls is not RateLimitMiddleware
+]
+
+# Se o middleware foi de fato removido da lista, atualize a app
+if len(filtered_user_middleware) < len(app.user_middleware):
+    app.user_middleware = filtered_user_middleware
+    # É crucial reconstruir a pilha de middleware para que as alterações tenham efeito
+    app.middleware_stack = app.build_middleware_stack()
+    print("INFO: RateLimitMiddleware removido programaticamente para os testes.")
+else:
+    print("INFO: RateLimitMiddleware não encontrado na configuração da app (pode já ter sido omitido).")
+
+# --- FIM DA MODIFICAÇÃO DA APP ---
+
+# O TestClient será criado com a instância 'app' potencialmente modificada
+client = TestClient(app)
+
+@pytest.fixture(scope="function", autouse=True)
+def setup_and_teardown_db():
+    Base.metadata.create_all(bind=engine)
+    yield
+    Base.metadata.drop_all(bind=engine)
+
+# --- Seus testes continuam aqui ---
+# test_user_data = {"nome": "Test User", "email": "test@example.com", "senha": "password123"}
+# ... resto dos seus testes ...
