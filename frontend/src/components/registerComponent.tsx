@@ -1,9 +1,9 @@
 "use client";
 
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import InputComponent from "./inputComponent";
-import { useRouter } from "next/navigation";
 
 export default function RegisterComponent() {
   const router = useRouter();
@@ -68,16 +68,20 @@ export default function RegisterComponent() {
       console.log("Cadastro realizado com sucesso:", response.data);
       setRegistered(true);
       router.push("/login");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { error?: string; detail?: string } };
+      };
       console.error("Erro no cadastro:", error);
       // Pegar a mensagem de erro do backend
-      // Pegar a mensagem de erro do backend
-      const resolveErrorMessage = (error: any): string => {
+      const resolveErrorMessage = (error: {
+        response?: { data?: { error?: string; detail?: string } };
+      }): string => {
         if (error?.response?.data?.error) return error.response.data.error;
         if (error?.response?.data?.detail) return error.response.data.detail;
         return "Erro ao fazer registro. Tente novamente.";
       };
-      const errorMessage = resolveErrorMessage(error);
+      const errorMessage = resolveErrorMessage(err);
 
       setErrors({ general: errorMessage });
       setIsLoading(false);

@@ -14,6 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link rel="icon" href="favicon-32x32.png" type="image/png"></link>
+      </head>
       <body className={`${montserrat.className} bg-amber-50`}>{children}</body>
     </html>
   );

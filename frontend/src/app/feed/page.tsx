@@ -1,5 +1,5 @@
 import HomeComponent from "@/components/homeComponent";
-import NavBarComponent from "@/components/navBarComponent";
+import NavBarComponent from "@/components/navBarComponentClient";
 
 export default function FeedPage() {
   return (

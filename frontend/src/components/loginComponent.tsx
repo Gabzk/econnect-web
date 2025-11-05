@@ -1,19 +1,50 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
-import InputComponent from "./inputComponent";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { type FormEvent, useEffect, useState } from "react";
+import InputComponent from "./inputComponent";
 
 export default function LoginComponent() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>(
-    {},
-  );
+  const [errors, setErrors] = useState<{
+    email?: string;
+    password?: string;
+    general?: string;
+  }>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const checkIfAuthenticated = async () => {
+    try {
+      const response = await axios.get("/api/auth/status");
+      const { isAuthenticated, hasRefreshToken } = response.data;
+
+      if (isAuthenticated) {
+        // Já está autenticado, redirecionar para feed
+        router.push("/feed");
+      } else if (hasRefreshToken) {
+        // Tem refresh token, tentar renovar
+        try {
+          await axios.post("/api/auth/refresh");
+          router.push("/feed");
+        } catch (_error) {
+          // Refresh falhou, continuar na tela de login
+          console.log("Refresh token expirado ou inválido");
+        }
+      }
+    } catch (error) {
+      // Erro ao verificar, continuar na tela de login
+      console.error("Erro ao verificar autenticação:", error);
+    }
+  };
+
+  // Verificar se já está autenticado ao montar o componente
+  useEffect(() => {
+    checkIfAuthenticated();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: { email?: string; password?: string } = {};
@@ -52,12 +83,18 @@ export default function LoginComponent() {
 
       console.log("Login bem-sucedido:", res.data);
       router.push("/feed"); // Redirecionar para a feed após o login
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { error?: string; detail?: string } };
+      };
       console.error("Erro no login:", error);
-      
+
       // Pegar a mensagem de erro do backend
-      const errorMessage = error.response?.data?.error || error.response?.data?.detail || "Erro ao fazer login. Tente novamente.";
-      
+      const errorMessage =
+        err.response?.data?.error ||
+        err.response?.data?.detail ||
+        "Erro ao fazer login. Tente novamente.";
+
       setErrors({ general: errorMessage });
     } finally {
       setIsLoading(false);
