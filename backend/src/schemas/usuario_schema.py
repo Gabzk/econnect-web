@@ -28,10 +28,8 @@ class UsuarioResponse(BaseModel):
         Esquema de resposta para operações relacionadas ao usuário.
 
         Atributos:
-        - sucess (bool): Indica se a operação foi bem-sucedida.
         - message (str): Mensagem descritiva do resultado.
     '''
-    sucess: bool
     message: str
     
 class LoginSchema(BaseModel):

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
+from typing import Optional, Union
 from src.auth.jwt import (
     create_access_token,
     create_refresh_token,
@@ -21,20 +22,23 @@ auth_router = APIRouter(
 )
 
 
-@auth_router.post("/register", response_model=UsuarioResponse)
+@auth_router.post("/register", response_model=UsuarioResponse, status_code=201)
 async def register(
     nome: str = Form(...),
     email: str = Form(...),
     senha: str = Form(...),
-    image: UploadFile = File(None),
+    image: Union[UploadFile, str, None] = File(None),
     db: Session = Depends(get_db),
 ):
     try:
+        # Trata string vazia como None
+        if isinstance(image, str):
+            image = None
+            
         usuario = UsuarioCreate(nome=nome, email=email, senha=senha)
         create_usuario(usuario, db, image)
-        return UsuarioResponse(sucess=True, message="Cadastro efetuado com sucesso")
+        return UsuarioResponse(message="Usuário cadastrado com sucesso.")
     except HTTPException as exc:
-        # Propaga erros de validação customizados
         raise exc
     except Exception:
         raise HTTPException(
