@@ -11,21 +11,25 @@ export async function GET() {
   const accessToken = (await cookieStore).get("access_token")?.value;
 
   if (!accessToken) {
-    return NextResponse.json({ error: "Token de acesso não encontrado" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Token de acesso não encontrado" },
+      { status: 401 },
+    );
 
-  try {
-    // Faz o request do usuario para o backend usando o token de acesso do cookie
-    const response = await axios.get(`${BACKEND_URL}/user`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        api_key: API_KEY
-      },
-    });
+    try {
+      // Faz o request do usuario para o backend usando o token de acesso do cookie
+      const response = await axios.get(`${BACKEND_URL}/user`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          api_key: API_KEY,
+        },
+      });
 
-    return NextResponse.json(response.data);
-  } catch (err: any) {
-    const status = err.response?.status || 500;
-    const message = err.response?.data?.detail || "Erro interno";
-    return NextResponse.json({ error: message }, { status });
+      return NextResponse.json(response.data);
+    } catch (err: any) {
+      const status = err.response?.status || 500;
+      const message = err.response?.data?.detail || "Erro interno";
+      return NextResponse.json({ error: message }, { status });
+    }
   }
 }
