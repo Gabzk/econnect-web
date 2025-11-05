@@ -15,21 +15,24 @@ export async function GET() {
       { error: "Token de acesso não encontrado" },
       { status: 401 },
     );
+  }
 
-    try {
-      // Faz o request do usuario para o backend usando o token de acesso do cookie
-      const response = await axios.get(`${BACKEND_URL}/user`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          api_key: API_KEY,
-        },
-      });
+  try {
+    // Faz o request do usuario para o backend usando o token de acesso do cookie
+    const response = await axios.get(`${BACKEND_URL}/user`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        api_key: API_KEY,
+      },
+    });
 
-      return NextResponse.json(response.data);
-    } catch (err: any) {
-      const status = err.response?.status || 500;
-      const message = err.response?.data?.detail || "Erro interno";
-      return NextResponse.json({ error: message }, { status });
-    }
+    return NextResponse.json(response.data);
+  } catch (err: unknown) {
+    const error = err as {
+      response?: { status?: number; data?: { detail?: string } };
+    };
+    const status = error.response?.status || 500;
+    const message = error.response?.data?.detail || "Erro interno";
+    return NextResponse.json({ error: message }, { status });
   }
 }

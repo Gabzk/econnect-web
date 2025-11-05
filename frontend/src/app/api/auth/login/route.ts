@@ -42,29 +42,37 @@ export async function POST(request: Request) {
       );
     }
 
-    (await cookies()).set({
+    const cookieStore = await cookies();
+
+    // Access token expira em 1 hora (3600 segundos)
+    cookieStore.set({
       name: "access_token",
       value: access_token,
       httpOnly: true,
       path: "/",
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
+      maxAge: 3600, // 1 hora
     });
 
-    (await cookies()).set({
+    // Refresh token expira em 30 dias
+    cookieStore.set({
       name: "refresh_token",
       value: refresh_token,
       httpOnly: true,
       path: "/",
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
+      maxAge: 30 * 24 * 60 * 60, // 30 dias
     });
 
     return NextResponse.json({ message: "Login bem-sucedido" });
-  } catch (err: any) {
-    // Axios joga erro para status >= 400, então capturamos aqui
-    const status = err.response?.status || 500;
-    const message = err.response?.data?.detail || "Erro interno";
+  } catch (err: unknown) {
+    const error = err as {
+      response?: { status?: number; data?: { detail?: string } };
+    };
+    const status = error.response?.status || 500;
+    const message = error.response?.data?.detail || "Erro interno";
     return NextResponse.json({ error: message }, { status });
   }
 }
