@@ -1,5 +1,6 @@
 import { Montserrat } from "next/font/google";
 import "./global.css";
+import { NewsCacheProvider } from "@/contexts/NewsCacheContext";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -17,7 +18,9 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="favicon-32x32.png" type="image/png"></link>
       </head>
-      <body className={`${montserrat.className} bg-amber-50`}>{children}</body>
+      <body className={`${montserrat.className} bg-amber-50`}>
+        <NewsCacheProvider>{children}</NewsCacheProvider>
+      </body>
     </html>
   );
 }
