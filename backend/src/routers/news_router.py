@@ -28,7 +28,7 @@ def latest_feed(
     return get_news_feed(usuario, db, skip=skip, limit=limit)
 
 
-@news_router.get("/feed/hotest", response_model=list[NoticiaResponse])
+@news_router.get("/feed/hottest", response_model=list[NoticiaResponse])
 def hottest_feed(
     skip: int = Query(0, ge=0),
     limit: int = Query(10, ge=1, le=10),  # Limite máximo de 10 notícias por vez
