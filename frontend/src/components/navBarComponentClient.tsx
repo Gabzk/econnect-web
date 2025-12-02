@@ -2,15 +2,30 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function NavBarComponent() {
   const { isAuthenticated, isLoading, logout } = useAuth();
   const _router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handleLogout = async () => {
     await logout();
+  };
+
+  // Função auxiliar para verificar se o link está ativo
+  const isActive = (path: string, sortParam?: string) => {
+    if (path === "/") return pathname === "/";
+
+    // Verifica se estamos na rota correta
+    if (pathname === path) {
+      const currentSort = searchParams.get("sort");
+      // Se exige um parametro de sort, verifica se é igual. Se não exige, verifica se não tem nenhum.
+      return sortParam ? currentSort === sortParam : !currentSort;
+    }
+    return false;
   };
 
   return (
@@ -23,7 +38,9 @@ export default function NavBarComponent() {
               <li>
                 <Link
                   href="/"
-                  className="text-white transition-colors hover:text-amber-100"
+                  className={`transition-colors hover:text-amber-100 ${
+                    isActive("/") ? "text-white font-bold" : "text-emerald-200"
+                  }`}
                 >
                   Home
                 </Link>
@@ -33,15 +50,23 @@ export default function NavBarComponent() {
                   <li>
                     <Link
                       href="/feed"
-                      className="text-emerald-200 transition-colors hover:text-amber-100"
+                      className={`transition-colors hover:text-amber-100 ${
+                        isActive("/feed")
+                          ? "text-white font-bold"
+                          : "text-emerald-200"
+                      }`}
                     >
                       Feed
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/feed"
-                      className="text-emerald-200 transition-colors hover:text-amber-100"
+                      href="/hottest"
+                      className={`transition-colors hover:text-amber-100 ${
+                        isActive("/hottest")
+                          ? "text-white font-bold"
+                          : "text-emerald-200"
+                      }`}
                     >
                       Mais Curtidas
                     </Link>
@@ -106,7 +131,9 @@ export default function NavBarComponent() {
           <li>
             <Link
               href="/"
-              className="block rounded-lg px-4 py-2 text-white hover:bg-emerald-700"
+              className={`block rounded-lg px-4 py-2 hover:bg-emerald-700 ${
+                isActive("/") ? "text-white bg-emerald-700" : "text-emerald-200"
+              }`}
             >
               Home
             </Link>
@@ -116,15 +143,23 @@ export default function NavBarComponent() {
               <li>
                 <Link
                   href="/feed"
-                  className="block rounded-lg px-4 py-2 text-emerald-200 hover:bg-emerald-700"
+                  className={`block rounded-lg px-4 py-2 hover:bg-emerald-700 ${
+                    isActive("/feed")
+                      ? "text-white bg-emerald-700"
+                      : "text-emerald-200"
+                  }`}
                 >
                   Feed
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/feed"
-                  className="block rounded-lg px-4 py-2 text-emerald-200 hover:bg-emerald-700"
+                  href="/feed?sort=most-liked"
+                  className={`block rounded-lg px-4 py-2 hover:bg-emerald-700 ${
+                    isActive("/feed", "most-liked")
+                      ? "text-white bg-emerald-700"
+                      : "text-emerald-200"
+                  }`}
                 >
                   Mais Curtidas
                 </Link>
