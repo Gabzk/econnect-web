@@ -1,11 +1,11 @@
 import Image from "next/image";
 
 type NewsCardComponentProps = {
-  title: string;
-  summary: string;
-  imageUrl: string;
-  link: string;
-  date: string;
+  title?: string;
+  summary?: string;
+  imageUrl?: string;
+  link?: string;
+  date?: string;
   big?: boolean;
 };
 
@@ -19,26 +19,28 @@ export default function NewsCardComponent({
 }: NewsCardComponentProps) {
   return (
     <div
-      className={`flex ${big ? "flex-col" : "flex-row"} gap-4 border border-gray-300 rounded-lg p-4 mb-4 shadow-sm hover:shadow-md transition-shadow duration-300`}
+      className={`flex flex-col w-full gap-4 border border-gray-300 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 ${big ? "md:flex-row" : ""}`}
     >
       <Image
-        src={imageUrl}
-        alt={title}
-        width={big ? 800 : 192}
-        height={big ? 384 : 192}
-        className={`object-cover rounded-md ${big ? "w-full h-96" : "w-48 h-48"}`}
+        src={imageUrl ? imageUrl : "/tigreen.png"}
+        alt={title ? title : "Imagem da Notícia"}
+        width={big ? 600 : 400}
+        height={big ? 400 : 250}
+        className={`object-cover w-full ${big ? "md:w-1/2 h-64 md:h-80" : "h-48"}`}
       />
       <div
-        className={`flex flex-col justify-between flex-1 ${big ? "" : "h-48"}`}
+        className={`flex flex-col justify-between flex-1 p-4 ${big ? "md:p-6" : ""}`}
       >
         <div>
           <a
             href={link}
-            className={`font-semibold text-gray-800 mb-2 block ${big ? "text-3xl" : "text-xl"}`}
+            className={`font-semibold text-gray-800 mb-2 block hover:text-blue-600 transition-colors ${big ? "text-2xl md:text-3xl" : "text-lg"}`}
           >
             {title ? title : "Título da Notícia"}
           </a>
-          <p className={`text-gray-600 mb-4 ${big ? "text-lg" : "text-base"}`}>
+          <p
+            className={`text-gray-600 mb-4 line-clamp-3 ${big ? "text-base md:text-lg" : "text-sm"}`}
+          >
             {summary ? summary : "Resumo da notícia..."}
           </p>
         </div>
