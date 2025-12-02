@@ -41,9 +41,17 @@ export default function HomeComponent() {
         </div>
       )}
 
-      <HighlightComponent title="Notícias mais curtidas" />
+      <HighlightComponent
+        title="Notícias mais curtidas"
+        feedType="hottest"
+        limit={4}
+      />
 
-      <HighlightComponent title="Últimas Notícias" />
+      <HighlightComponent
+        title="Últimas Notícias"
+        feedType="latest"
+        limit={4}
+      />
     </div>
   );
 }
