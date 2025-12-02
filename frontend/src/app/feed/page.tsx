@@ -1,11 +1,11 @@
-import HomeComponent from "@/components/homeComponent";
+import FeedComponent from "@/components/feedComponent";
 import NavBarComponent from "@/components/navBarComponentClient";
 
 export default function FeedPage() {
   return (
     <div>
       <NavBarComponent />
-      <HomeComponent />
+      <FeedComponent feedType="latest" />
     </div>
   );
 }
