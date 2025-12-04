@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from src.auth.auth import get_current_user
+from src.auth.auth import get_current_user, get_current_user_optional
 from src.db.database import get_db
 from src.schemas.noticia_schema import NoticiaCreate, NoticiaResponse
 from src.auth.api_key import verify_api_key
@@ -23,7 +23,7 @@ def latest_feed(
     skip: int = Query(0, ge=0),
     limit: int = Query(10, ge=1, le=10),  # Limite máximo de 10 notícias por vez
     db: Session = Depends(get_db),
-    usuario=Depends(get_current_user),
+    usuario=Depends(get_current_user_optional),
 ):
     return get_news_feed(usuario, db, skip=skip, limit=limit)
 
@@ -33,7 +33,7 @@ def hottest_feed(
     skip: int = Query(0, ge=0),
     limit: int = Query(10, ge=1, le=10),  # Limite máximo de 10 notícias por vez
     db: Session = Depends(get_db),
-    usuario=Depends(get_current_user),
+    usuario=Depends(get_current_user_optional),
 ):
     return get_news_feed(usuario, db, skip=skip, limit=limit, order_by="qtd_curtidas")
 
@@ -49,7 +49,7 @@ def liked_history(
 
 @news_router.get("/", response_model=NoticiaResponse)
 def get_news(
-    news_id: int, db: Session = Depends(get_db), usuario=Depends(get_current_user)
+    news_id: int, db: Session = Depends(get_db), usuario=Depends(get_current_user_optional)
 ):
     return get_news_by_id(usuario, news_id, db)
 

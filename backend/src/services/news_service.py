@@ -66,13 +66,17 @@ def build_noticia_response(noticia, usuario, db, qtd_curtidas=None):
     # Conta o número de curtidas se não for passado
     if qtd_curtidas is None:
         qtd_curtidas = db.query(Curtir).filter(Curtir.id_noticia == noticia.id).count()
-    # Verifica se o usuário já curtiu essa notícia
+    
+    # Verifica se o usuário já curtiu essa notícia (se estiver autenticado)
     curtiu = (
         db.query(Curtir)
         .filter(Curtir.id_noticia == noticia.id, Curtir.id_usuario == usuario.id)
         .first()
         is not None
+        if usuario is not None
+        else False
     )
+    
     # Converte o relacionamento da fonte para o schema Pydantic
     fonte_response = (
         FonteResponse.model_validate(noticia.fonte, from_attributes=True)
@@ -97,7 +101,7 @@ def build_noticia_response(noticia, usuario, db, qtd_curtidas=None):
 
 # Função para buscar o feed de notícias, ordenando por data ou por curtidas
 def get_news_feed(
-    usuario: Usuario,
+    usuario: Usuario | None,
     db: Session,
     skip: int = 0,
     limit: int = 10,
@@ -145,7 +149,7 @@ def get_liked_news(usuario: Usuario, db: Session, skip: int = 0, limit: int = 10
 
 
 # Função para buscar uma notícia específica pelo ID
-def get_news_by_id(usuario: Usuario, news_id: int, db: Session):
+def get_news_by_id(usuario: Usuario | None, news_id: int, db: Session):
     noticia = db.query(Noticia).filter(Noticia.id == news_id).first()
     if not noticia:
         raise HTTPException(status_code=404, detail="Notícia não encontrada")
