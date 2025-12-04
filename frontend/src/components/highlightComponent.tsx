@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import type { FeedType, Noticia } from "@/types/news";
 import LoadingSpinner from "./loadingComponent";
@@ -105,6 +104,9 @@ export default function HighlightComponent({
             date={new Date(featuredNews.data_postagem).toLocaleDateString(
               "pt-BR",
             )}
+            id={featuredNews.id}
+            likes={featuredNews.qtd_curtidas}
+            liked={featuredNews.curtido}
           />
         </div>
       )}
@@ -120,6 +122,9 @@ export default function HighlightComponent({
             imageUrl={noticia.imagem}
             link={noticia.url}
             date={new Date(noticia.data_postagem).toLocaleDateString("pt-BR")}
+            id={noticia.id}
+            likes={noticia.qtd_curtidas}
+            liked={noticia.curtido}
           />
         ))}
       </div>

@@ -165,6 +165,9 @@ export default function FeedComponent({
             date={new Date(featuredNews.data_postagem).toLocaleDateString(
               "pt-BR",
             )}
+            id={featuredNews.id}
+            likes={featuredNews.qtd_curtidas}
+            liked={featuredNews.curtido}
           />
         </section>
       )}
@@ -180,6 +183,9 @@ export default function FeedComponent({
             imageUrl={noticia.imagem}
             link={noticia.url}
             date={new Date(noticia.data_postagem).toLocaleDateString("pt-BR")}
+            id={noticia.id}
+            likes={noticia.qtd_curtidas}
+            liked={noticia.curtido}
           />
         ))}
       </section>
