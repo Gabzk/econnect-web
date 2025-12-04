@@ -1,24 +1,14 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-
-const BACKEND_URL = process.env.BACKEND_URL;
-const API_KEY = process.env.API_KEY;
+import { getEnvConfig, handleApiError, validateEnvVars } from "@/lib/api";
 
 export async function POST(request: Request) {
-  if (!BACKEND_URL) {
-    return NextResponse.json(
-      { error: "BACKEND_URL não está definido nas variáveis de ambiente." },
-      { status: 500 },
-    );
-  }
+  const envError = validateEnvVars();
+  if (envError) return envError;
 
-  if (!API_KEY) {
-    return NextResponse.json(
-      { error: "API_KEY não está definido nas variáveis de ambiente." },
-      { status: 500 },
-    );
-  }
+  const { BACKEND_URL, API_KEY } = getEnvConfig();
+
   try {
     const body = await request.json();
 
@@ -52,7 +42,7 @@ export async function POST(request: Request) {
       path: "/",
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 3600, // 1 hora
+      maxAge: 3600,
     });
 
     // Refresh token expira em 30 dias
@@ -63,16 +53,11 @@ export async function POST(request: Request) {
       path: "/",
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 30 * 24 * 60 * 60, // 30 dias
+      maxAge: 30 * 24 * 60 * 60,
     });
 
     return NextResponse.json({ message: "Login bem-sucedido" });
   } catch (err: unknown) {
-    const error = err as {
-      response?: { status?: number; data?: { detail?: string } };
-    };
-    const status = error.response?.status || 500;
-    const message = error.response?.data?.detail || "Erro interno";
-    return NextResponse.json({ error: message }, { status });
+    return handleApiError(err);
   }
 }
