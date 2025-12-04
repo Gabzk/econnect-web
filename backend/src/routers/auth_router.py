@@ -37,7 +37,7 @@ async def register(
             
         usuario = UsuarioCreate(nome=nome, email=email, senha=senha)
         create_usuario(usuario, db, image)
-        return UsuarioResponse(message="Usuário cadastrado com sucesso.")
+        return UsuarioResponse(message="Cadastro feito com sucesso.")
     except HTTPException as exc:
         raise exc
     except Exception:

@@ -38,7 +38,7 @@ export async function POST(request: Request) {
       },
     );
 
-    return NextResponse.json({ message: "Registro bem-sucedido" });
+    return NextResponse.json(response.data);
   } catch (err: unknown) {
     return handleApiError(err);
   }
