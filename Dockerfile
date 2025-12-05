@@ -55,8 +55,6 @@ RUN poetry install --no-interaction --no-ansi --only main
 
 # Copiar código do backend
 COPY backend/src ./src
-COPY backend/alembic.ini ./
-COPY backend/alembic ./alembic
 
 # ============================================
 # Frontend Setup
@@ -98,17 +96,6 @@ autorestart=true
 stdout_logfile=/var/log/supervisor/frontend.log
 stderr_logfile=/var/log/supervisor/frontend_err.log
 environment=NODE_ENV="production"
-
-[program:migrations]
-command=alembic upgrade head
-directory=/app/backend
-autostart=true
-autorestart=false
-startsecs=0
-startretries=3
-stdout_logfile=/var/log/supervisor/migrations.log
-stderr_logfile=/var/log/supervisor/migrations_err.log
-priority=1
 EOF
 
 # Criar diretórios de log
