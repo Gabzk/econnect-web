@@ -66,6 +66,7 @@ COPY --from=frontend-builder /app/frontend/.next ./.next
 COPY --from=frontend-builder /app/frontend/node_modules ./node_modules
 COPY --from=frontend-builder /app/frontend/package.json ./
 COPY --from=frontend-builder /app/frontend/public ./public
+COPY --from=frontend-builder /app/frontend/next.config.ts ./
 
 # ============================================
 # Supervisor Configuration
