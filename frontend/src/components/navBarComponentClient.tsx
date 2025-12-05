@@ -3,9 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { useAuth } from "@/hooks/useAuth";
 
-export default function NavBarComponent() {
+function NavBarContent() {
   const { isAuthenticated, isLoading, logout } = useAuth();
   const _router = useRouter();
   const pathname = usePathname();
@@ -169,5 +170,35 @@ export default function NavBarComponent() {
         </ul>
       </div>
     </nav>
+  );
+}
+
+// Fallback simples para o Suspense
+function NavBarFallback() {
+  return (
+    <nav className="bg-emerald-800">
+      <div className="mx-auto max-w-7xl p-4 relative">
+        <div className="flex items-center justify-center">
+          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
+            <ul className="flex items-center gap-8 font-medium">
+              <li>
+                <span className="text-emerald-200">Home</span>
+              </li>
+            </ul>
+          </div>
+          <div className="flex items-center gap-3 ml-auto">
+            <div className="h-10 w-24 bg-emerald-700 rounded-lg animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+export default function NavBarComponent() {
+  return (
+    <Suspense fallback={<NavBarFallback />}>
+      <NavBarContent />
+    </Suspense>
   );
 }
