@@ -109,13 +109,34 @@ COPY <<'EOF' /app/entrypoint.sh
 #!/bin/bash
 set -e
 
-# Aguardar o banco de dados estar disponível
-echo "Aguardando o banco de dados..."
-sleep 5
+# Função para aguardar o banco de dados
+wait_for_db() {
+    echo "Aguardando o banco de dados..."
+    local max_attempts=30
+    local attempt=1
+    
+    while [ $attempt -le $max_attempts ]; do
+        if cd /app/backend && python -c "
+from src.db.database import engine
+from sqlalchemy import text
+with engine.connect() as conn:
+    conn.execute(text('SELECT 1'))
+" 2>/dev/null; then
+            echo "Banco de dados disponível!"
+            return 0
+        fi
+        
+        echo "Tentativa $attempt/$max_attempts - Banco não disponível, aguardando..."
+        sleep 2
+        attempt=$((attempt + 1))
+    done
+    
+    echo "Erro: Banco de dados não ficou disponível após $max_attempts tentativas"
+    return 1
+}
 
-# Executar migrations
-echo "Executando migrations..."
-cd /app/backend && alembic upgrade head
+# Aguardar banco de dados
+wait_for_db
 
 # Iniciar supervisor (gerencia backend e frontend)
 echo "Iniciando aplicação..."
