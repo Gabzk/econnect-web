@@ -70,8 +70,17 @@ docker compose -f docker-compose.prod.yml up --build -d
 # Ver containers rodando
 docker ps
 
-# Ver logs em tempo real
+# Ver logs em tempo real de um container
 docker logs <nome-container> -f
+
+# Ver logs de todos os containers do compose simultaneamente
+docker compose -f docker-compose.dev.yml logs -f
+
+# Ver logs apenas dos últimos 100 registros e continuar acompanhando
+docker compose -f docker-compose.dev.yml logs -f --tail=100
+
+# Parar de ver logs (containers continuam rodando)
+# Pressione Ctrl+C
 
 # Parar containers (dev)
 docker compose -f docker-compose.dev.yml down
