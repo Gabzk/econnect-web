@@ -9,8 +9,7 @@ services:
       - ./backend/src:/app/src
       - ./backend/alembic:/app/alembic
     env_file:
-      - path: ./backend/.env
-        required: true
+      - .env
     environment:
       - PYTHONUNBUFFERED=1
 
@@ -24,8 +23,7 @@ services:
       - ./frontend/src:/app/src
       - ./frontend/public:/app/public
     env_file:
-      - path: ./frontend/.env.docker
-        required: true
+      - .env
     environment:
       - WATCHPACK_POLLING=true
     depends_on:
