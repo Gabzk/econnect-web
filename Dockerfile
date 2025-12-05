@@ -117,14 +117,28 @@ wait_for_db() {
     local attempt=1
     
     while [ $attempt -le $max_attempts ]; do
-        if cd /app/backend && python -c "
+        # Na última tentativa, mostra o erro completo
+        if [ $attempt -eq $max_attempts ]; then
+            echo "Última tentativa - mostrando erro completo:"
+            if cd /app/backend && python -c "
+from src.db.database import engine
+from sqlalchemy import text
+with engine.connect() as conn:
+    conn.execute(text('SELECT 1'))
+"; then
+                echo "Banco de dados disponível!"
+                return 0
+            fi
+        else
+            if cd /app/backend && python -c "
 from src.db.database import engine
 from sqlalchemy import text
 with engine.connect() as conn:
     conn.execute(text('SELECT 1'))
 " 2>/dev/null; then
-            echo "Banco de dados disponível!"
-            return 0
+                echo "Banco de dados disponível!"
+                return 0
+            fi
         fi
         
         echo "Tentativa $attempt/$max_attempts - Banco não disponível, aguardando..."
