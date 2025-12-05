@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.npm
+
+# Builds
+.next/
+out/
+frontend/.next/
+frontend/out/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.pytest_cache/
+tests/
+htmlcov/
+
+# Docs (exceto estrutura necessária)
+docs/
+
+# Landing page (não faz parte da app principal)
+landingPage/
