@@ -39,7 +39,7 @@ export function validateEnvVars(): NextResponse | null {
  * Pressupõe que as variáveis já foram validadas por validateEnvVars().
  */
 export function getEnvConfig(): { BACKEND_URL: string; API_KEY: string } {
-  return { BACKEND_URL, API_KEY };
+  return { BACKEND_URL: BACKEND_URL!, API_KEY: API_KEY! };
 }
 
 /**
