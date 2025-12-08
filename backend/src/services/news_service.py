@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException, status
 from src.db.models.curtir_model import Curtir
 from src.db.models.usuario_model import Usuario
@@ -6,6 +7,20 @@ from sqlalchemy.orm import Session
 from src.db.models.noticia_model import Noticia
 from src.schemas.fonte_schema import FonteResponse
 from sqlalchemy import func
+
+
+# Calcula a data limite baseada no filtro de tempo
+def get_time_filter_date(time_filter: str) -> datetime | None:
+    now = datetime.now(timezone.utc)
+    match time_filter:
+        case "week":
+            return now - timedelta(days=7)
+        case "month":
+            return now - timedelta(days=30)
+        case "year":
+            return now - timedelta(days=365)
+        case _:  # "all" ou qualquer outro valor
+            return None
 
 
 # Função para criar uma nova notícia no banco de dados
@@ -106,12 +121,24 @@ def get_news_feed(
     skip: int = 0,
     limit: int = 10,
     order_by: str = "data_postagem",
+    time_filter: str = "all"
 ):
     # Ordena por quantidade de curtidas
     if order_by == "qtd_curtidas":
-        noticias = (
+        # Calcula a data limite baseada no filtro
+        date_limit = get_time_filter_date(time_filter)
+        
+        query = (
             db.query(Noticia, func.count(Curtir.id_usuario).label("qtd_curtidas"))
             .outerjoin(Curtir, Noticia.id == Curtir.id_noticia)
+        )
+        
+        # Aplica filtro de tempo se necessário
+        if date_limit:
+            query = query.filter(Noticia.data_postagem >= date_limit)
+        
+        noticias = (
+            query
             .group_by(Noticia.id)
             .order_by(func.count(Curtir.id_usuario).desc())
             .offset(skip)
