@@ -11,9 +11,10 @@ export async function GET(request: Request) {
   const skip = parseInt(searchParams.get("skip") || "0", 10);
   const limit = parseInt(searchParams.get("limit") || "10", 10);
   const feedType = searchParams.get("feedType") || FeedType.LATEST;
+  const time_filter = searchParams.get("time_filter") || "all";
 
   // Feed de curtidos requer autenticação
   const requireAuth = feedType === FeedType.LIKED;
 
-  return apiGet(`/news/feed/${feedType}`, { skip, limit }, requireAuth);
+  return apiGet(`/news/feed/${feedType}`, { skip, limit, time_filter }, requireAuth);
 }

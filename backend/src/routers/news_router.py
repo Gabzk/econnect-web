@@ -32,10 +32,11 @@ def latest_feed(
 def hottest_feed(
     skip: int = Query(0, ge=0),
     limit: int = Query(10, ge=1, le=10),  # Limite máximo de 10 notícias por vez
+    time_filter: str = Query("all", regex="^(week|month|year|all)$"),  # Filtro de tempo
     db: Session = Depends(get_db),
     usuario=Depends(get_current_user_optional),
 ):
-    return get_news_feed(usuario, db, skip=skip, limit=limit, order_by="qtd_curtidas")
+    return get_news_feed(usuario, db, skip=skip, limit=limit, order_by="qtd_curtidas", time_filter=time_filter)
 
 
 @news_router.get("/feed/liked", response_model=list[NoticiaResponse])
