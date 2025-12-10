@@ -1,78 +1,128 @@
-import Image from "next/image";
+"use client";
 
-export default function NavBarComponent() {
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { useAuth } from "@/hooks/useAuth";
+
+function NavBarContent() {
+  const { isAuthenticated, isLoading, logout } = useAuth();
+  const _router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const handleLogout = async () => {
+    await logout();
+  };
+
+  // Função auxiliar para verificar se o link está ativo
+  const isActive = (path: string, sortParam?: string) => {
+    if (path === "/") return pathname === "/";
+
+    // Verifica se estamos na rota correta
+    if (pathname === path) {
+      const currentSort = searchParams.get("sort");
+      // Se exige um parametro de sort, verifica se é igual. Se não exige, verifica se não tem nenhum.
+      return sortParam ? currentSort === sortParam : !currentSort;
+    }
+    return false;
+  };
+
   return (
     <nav className="bg-emerald-800">
-      <div className="mx-auto flex max-w-7xl items-center justify-between p-4">
-        {/* Navigation Links - Desktop centered, Mobile hidden */}
-        <div className="hidden flex-1 justify-center md:flex">
-          <ul className="flex items-center gap-8 font-medium">
-            <li>
-              <a
-                href="/feed"
-                className="text-white transition-colors hover:text-amber-100"
-                aria-current="page"
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="/feed"
-                className="text-emerald-200 transition-colors hover:text-amber-100"
-              >
-                Mais Recentes
-              </a>
-            </li>
-            <li>
-              <a
-                href="/feed"
-                className="text-emerald-200 transition-colors hover:text-amber-100"
-              >
-                Mais Curtidas
-              </a>
-            </li>
-          </ul>
-        </div>
+      <div className="mx-auto max-w-7xl p-4 relative">
+        <div className="flex items-center justify-center">
+          {/* Navigation Links - Desktop centered, Mobile hidden */}
+          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
+            <ul className="flex items-center gap-8 font-medium">
+              <li>
+                <Link
+                  href="/"
+                  className={`transition-colors hover:text-amber-100 ${
+                    isActive("/") ? "text-white font-bold" : "text-emerald-200"
+                  }`}
+                >
+                  Home
+                </Link>
+              </li>
+              {isAuthenticated && (
+                <>
+                  <li>
+                    <Link
+                      href="/feed"
+                      className={`transition-colors hover:text-amber-100 ${
+                        isActive("/feed")
+                          ? "text-white font-bold"
+                          : "text-emerald-200"
+                      }`}
+                    >
+                      Feed
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/hottest"
+                      className={`transition-colors hover:text-amber-100 ${
+                        isActive("/hottest")
+                          ? "text-white font-bold"
+                          : "text-emerald-200"
+                      }`}
+                    >
+                      Mais Curtidas
+                    </Link>
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>
 
-        {/* User Menu */}
-        <div className="flex items-center gap-3">
-          {/* Mobile Menu Toggle */}
-          <button
-            type="button"
-            className="rounded-lg p-2 text-emerald-100 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 md:hidden"
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <title>Menu</title>
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
+          {/* User Menu - Sempre no canto direito */}
+          <div className="flex items-center gap-3 ml-auto">
+            {!isLoading &&
+              (isAuthenticated ? (
+                <>
+                  {/* User Avatar */}
+                  <button
+                    type="button"
+                    className="rounded-full focus:outline-none focus:ring-4 focus:ring-emerald-600"
+                    aria-label="User menu"
+                  >
+                    <Image
+                      className="h-10 w-10 rounded-full ring-2 ring-emerald-600"
+                      src="/tigreen.png"
+                      alt="User profile"
+                      width={40}
+                      height={40}
+                    />
+                  </button>
 
-          {/* User Avatar */}
-          <button
-            type="button"
-            className="rounded-full focus:outline-none focus:ring-4 focus:ring-emerald-600"
-            aria-label="User menu"
-          >
-            <Image
-              className="h-10 w-10 rounded-full ring-2 ring-emerald-600"
-              src="/docs/images/people/profile-picture-3.jpg"
-              alt="User profile"
-              width={40}
-              height={40}
-            />
-          </button>
+                  {/* Logout Button */}
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="rounded-lg px-4 py-2 text-white bg-emerald-700 hover:bg-emerald-600 transition-colors"
+                  >
+                    Sair
+                  </button>
+                </>
+              ) : (
+                <div className="flex gap-3">
+                  <Link
+                    href="/login"
+                    className="rounded-lg px-4 py-2 text-white bg-emerald-700 hover:bg-emerald-600 transition-colors"
+                  >
+                    Entrar
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="rounded-lg px-4 py-2 text-emerald-800 bg-amber-100 hover:bg-amber-200 transition-colors font-medium"
+                  >
+                    Cadastrar
+                  </Link>
+                </div>
+              ))}
+          </div>
         </div>
       </div>
 
@@ -80,31 +130,75 @@ export default function NavBarComponent() {
       <div className="hidden border-t border-emerald-700 md:hidden">
         <ul className="space-y-1 p-4">
           <li>
-            <a
+            <Link
               href="/"
-              className="block rounded-lg px-4 py-2 text-white hover:bg-emerald-700"
+              className={`block rounded-lg px-4 py-2 hover:bg-emerald-700 ${
+                isActive("/") ? "text-white bg-emerald-700" : "text-emerald-200"
+              }`}
             >
               Home
-            </a>
+            </Link>
           </li>
-          <li>
-            <a
-              href="/feed"
-              className="block rounded-lg px-4 py-2 text-emerald-200 hover:bg-emerald-700"
-            >
-              Mais Recentes
-            </a>
-          </li>
-          <li>
-            <a
-              href="/feed"
-              className="block rounded-lg px-4 py-2 text-emerald-200 hover:bg-emerald-700"
-            >
-              Mais Curtidas
-            </a>
-          </li>
+          {isAuthenticated && (
+            <>
+              <li>
+                <Link
+                  href="/feed"
+                  className={`block rounded-lg px-4 py-2 hover:bg-emerald-700 ${
+                    isActive("/feed")
+                      ? "text-white bg-emerald-700"
+                      : "text-emerald-200"
+                  }`}
+                >
+                  Feed
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/feed?sort=most-liked"
+                  className={`block rounded-lg px-4 py-2 hover:bg-emerald-700 ${
+                    isActive("/feed", "most-liked")
+                      ? "text-white bg-emerald-700"
+                      : "text-emerald-200"
+                  }`}
+                >
+                  Mais Curtidas
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>
+  );
+}
+
+// Fallback simples para o Suspense
+function NavBarFallback() {
+  return (
+    <nav className="bg-emerald-800">
+      <div className="mx-auto max-w-7xl p-4 relative">
+        <div className="flex items-center justify-center">
+          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
+            <ul className="flex items-center gap-8 font-medium">
+              <li>
+                <span className="text-emerald-200">Home</span>
+              </li>
+            </ul>
+          </div>
+          <div className="flex items-center gap-3 ml-auto">
+            <div className="h-10 w-24 bg-emerald-700 rounded-lg animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+export default function NavBarComponent() {
+  return (
+    <Suspense fallback={<NavBarFallback />}>
+      <NavBarContent />
+    </Suspense>
   );
 }
