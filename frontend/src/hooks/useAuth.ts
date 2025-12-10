@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { refreshAuthToken } from "@/lib/auth-client";
 
 interface AuthStatus {
   isAuthenticated: boolean;
@@ -63,20 +64,11 @@ export function useAuth() {
   }, []);
 
   const refreshToken = async () => {
-    try {
-      const _response = await axios.post("/api/auth/refresh");
+    const success = await refreshAuthToken();
+    if (success) {
       console.log("Token renovado com sucesso!");
-      return true;
-    } catch (error: unknown) {
-      const err = error as { response?: { data?: unknown }; message?: string };
-      console.error(
-        "Erro ao renovar token:",
-        err.response?.data || err.message,
-      );
-      // Se o refresh falhou, significa que o refresh token também expirou
-      // Não fazer logout automático, apenas retornar false
-      return false;
     }
+    return success;
   };
 
   const logout = async () => {
