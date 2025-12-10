@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState } from "react";
 import { refreshAuthToken } from "@/lib/auth-client";
 import InputComponent from "./inputComponent";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginComponent() {
+  const { isAuthenticated, checkAuth } = useAuth();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -83,6 +85,7 @@ export default function LoginComponent() {
       });
 
       console.log("Login bem-sucedido:", res.data);
+      await checkAuth();
       router.push("/"); // Redirecionar para a feed após o login
     } catch (error: unknown) {
       const err = error as {
