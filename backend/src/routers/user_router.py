@@ -1,11 +1,17 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, File, Form, UploadFile
 from sqlalchemy.orm import Session
+
+from src.auth.api_key import verify_api_key
 from src.auth.auth import get_current_user
 from src.db.database import get_db
-from src.auth.api_key import verify_api_key
-from src.schemas.usuario_schema import UpdateUsuarioResponse, UpdateUsuario, UsuarioProfileResponse
+from src.schemas.usuario_schema import (
+    UpdateUsuario,
+    UpdateUsuarioResponse,
+    UsuarioProfileResponse,
+)
 from src.services.user_service import delete_usuario, update_usuario
-from typing import Optional
 
 user_router = APIRouter(
     prefix="/user", tags=["Usuário"], dependencies=[Depends(verify_api_key)]
@@ -36,10 +42,12 @@ def update(
 
     return update_usuario(usuario, db, updated_usuario)
 
+
 @user_router.get("/", response_model=UsuarioProfileResponse)
 def get_profile(usuario=Depends(get_current_user)):
     return UsuarioProfileResponse(
         nome=str(usuario.nome),
         email=str(usuario.email),
-        foto_perfil= str(usuario.foto_perfil) if usuario.foto_perfil else None
+        dataCadastro=str(usuario.data_cadastro),
+        foto_perfil=str(usuario.foto_perfil) if usuario.foto_perfil else None,
     )
