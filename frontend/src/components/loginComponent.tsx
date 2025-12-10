@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState } from "react";
+import { refreshAuthToken } from "@/lib/auth-client";
 import InputComponent from "./inputComponent";
 
 export default function LoginComponent() {
@@ -23,13 +24,13 @@ export default function LoginComponent() {
 
       if (isAuthenticated) {
         // Já está autenticado, redirecionar para feed
-        router.push("/feed");
+        router.push("/");
       } else if (hasRefreshToken) {
         // Tem refresh token, tentar renovar
-        try {
-          await axios.post("/api/auth/refresh");
-          router.push("/feed");
-        } catch (_error) {
+        const success = await refreshAuthToken();
+        if (success) {
+          router.push("/");
+        } else {
           // Refresh falhou, continuar na tela de login
           console.log("Refresh token expirado ou inválido");
         }
@@ -82,7 +83,7 @@ export default function LoginComponent() {
       });
 
       console.log("Login bem-sucedido:", res.data);
-      router.push("/feed"); // Redirecionar para a feed após o login
+      router.push("/"); // Redirecionar para a feed após o login
     } catch (error: unknown) {
       const err = error as {
         response?: { data?: { error?: string; detail?: string } };
