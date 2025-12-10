@@ -1,5 +1,5 @@
 import HomeComponent from "@/components/homeComponent";
-import NavBarComponent from "@/components/navBarComponentClient";
+import NavBarComponent from "@/components/navBarComponent";
 
 export default function HomePage() {
   return (
