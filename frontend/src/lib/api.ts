@@ -167,3 +167,14 @@ export async function apiDelete(
 ): Promise<NextResponse> {
   return apiRequest({ method: "DELETE", path, requireAuth });
 }
+
+/**
+ * Atalho para requisições PATCH
+ */
+export async function apiPatch(
+  path: string,
+  body?: unknown,
+  requireAuth = true,
+): Promise<NextResponse> {
+  return apiRequest({ method: "PATCH", path, body, requireAuth });
+}

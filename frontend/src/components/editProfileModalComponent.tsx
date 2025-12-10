@@ -5,7 +5,11 @@ import { useState } from "react";
 interface EditProfileModalComponentProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (data: { nome: string; email: string; senha: string }) => Promise<void>;
+  onConfirm: (data: {
+    nome: string;
+    email: string;
+    senha: string;
+  }) => Promise<void>;
   initialData: {
     nome: string;
     email: string;
@@ -19,8 +23,8 @@ export default function EditProfileModalComponent({
   initialData,
 }: EditProfileModalComponentProps) {
   const [formData, setFormData] = useState({
-    nome: initialData.nome,
-    email: initialData.email,
+    nome: "",
+    email: "",
     senha: "",
   });
   const [loading, setLoading] = useState(false);
@@ -36,22 +40,13 @@ export default function EditProfileModalComponent({
   };
 
   const handleConfirm = async () => {
-    // Validações básicas
-    if (!formData.nome.trim()) {
-      setError("Nome não pode estar vazio");
-      return;
-    }
-
-    if (!formData.email.trim()) {
-      setError("Email não pode estar vazio");
-      return;
-    }
-
-    // Validação de email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError("Email inválido");
-      return;
+    // Validação de email (apenas se preenchido)
+    if (formData.email.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        setError("Email inválido");
+        return;
+      }
     }
 
     setLoading(true);
@@ -71,10 +66,11 @@ export default function EditProfileModalComponent({
     <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-[#F5F1E8] rounded-lg shadow-lg w-full max-w-md mx-4 p-8 border border-[#D5D0B3]">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold text-[#1F4F25]">
+        <div className="flex flex-col items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold text-emerald-800">
             Editar Perfil
           </h2>
+          <p>Deixe em branco para não alterar</p>
         </div>
 
         {/* Error Message */}
@@ -85,10 +81,10 @@ export default function EditProfileModalComponent({
         )}
 
         {/* Form */}
-        <div className="space-y-4 mb-6">
+        <div className="space-y-4 mb-6 text-emerald-900">
           {/* Nome */}
           <div>
-            <label className="block text-sm font-medium text-[#1F4F25] mb-2">
+            <label className="block text-sm font-medium mb-2">
               Nome
             </label>
             <input
@@ -97,14 +93,14 @@ export default function EditProfileModalComponent({
               value={formData.nome}
               onChange={handleInputChange}
               disabled={loading}
-              className="w-full px-4 py-2 border border-[#D5D0B3] rounded bg-white text-[#1F4F25] focus:outline-none focus:ring-2 focus:ring-[#2F6D3A] disabled:opacity-50"
-              placeholder="Seu nome"
+              className="w-full px-4 py-2 border border-[#D5D0B3] rounded bg-white text-emerald-900 focus:outline-none focus:ring-2 focus:ring-[#2F6D3A] disabled:opacity-50"
+              placeholder={initialData.nome}
             />
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-[#1F4F25] mb-2">
+            <label className="block text-sm font-medium mb-2">
               Email
             </label>
             <input
@@ -113,15 +109,15 @@ export default function EditProfileModalComponent({
               value={formData.email}
               onChange={handleInputChange}
               disabled={loading}
-              className="w-full px-4 py-2 border border-[#D5D0B3] rounded bg-white text-[#1F4F25] focus:outline-none focus:ring-2 focus:ring-[#2F6D3A] disabled:opacity-50"
-              placeholder="seu@email.com"
+              className="w-full px-4 py-2 border border-[#D5D0B3] rounded bg-white text-emerald-900 focus:outline-none focus:ring-2 focus:ring-[#2F6D3A] disabled:opacity-50"
+              placeholder={initialData.email}
             />
           </div>
 
           {/* Senha */}
           <div>
-            <label className="block text-sm font-medium text-[#1F4F25] mb-2">
-              Senha (deixar em branco para não alterar)
+            <label className="block text-sm font-medium mb-2">
+              Senha
             </label>
             <input
               type="password"
@@ -129,7 +125,7 @@ export default function EditProfileModalComponent({
               value={formData.senha}
               onChange={handleInputChange}
               disabled={loading}
-              className="w-full px-4 py-2 border border-[#D5D0B3] rounded bg-white text-[#1F4F25] focus:outline-none focus:ring-2 focus:ring-[#2F6D3A] disabled:opacity-50"
+              className="w-full px-4 py-2 border border-[#D5D0B3] rounded bg-white text-emerald-900 focus:outline-none focus:ring-2 focus:ring-[#2F6D3A] disabled:opacity-50"
               placeholder="Nova senha"
             />
           </div>
@@ -140,14 +136,14 @@ export default function EditProfileModalComponent({
           <button
             onClick={onClose}
             disabled={loading}
-            className="flex-1 px-4 py-2 border border-[#D5D0B3] rounded text-[#1F4F25] hover:bg-[#E8E4D5] transition disabled:opacity-50"
+            className="flex-1 px-4 py-2 border border-[#D5D0B3] rounded text-emerald-800 hover:bg-[#E8E4D5] transition disabled:opacity-50"
           >
             Cancelar
           </button>
           <button
             onClick={handleConfirm}
             disabled={loading}
-            className="flex-1 px-4 py-2 bg-[#2F6D3A] text-white rounded hover:bg-[#245B2A] transition disabled:opacity-50 flex items-center justify-center gap-2"
+            className="flex-1 px-4 py-2 bg-emerald-700 text-white rounded hover:bg-emerald-900 transition disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading ? "Salvando..." : "Confirmar"}
           </button>

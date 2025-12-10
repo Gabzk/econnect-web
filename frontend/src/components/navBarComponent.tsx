@@ -78,14 +78,14 @@ function NavBarContent() {
           </div>
 
           {/* User Menu - Sempre no canto direito */}
-          <div className="flex items-center gap-3 ml-auto">
+          <div className="flex items-center gap-3 ml-auto ">
             {!isLoading &&
               (isAuthenticated ? (
                 <>
                   {/* User Avatar */}
-                  <button
-                    type="button"
-                    className="rounded-full focus:outline-none focus:ring-4 focus:ring-emerald-600"
+                  <Link
+                    href="/profile"
+                    className="rounded-full"
                     aria-label="User menu"
                   >
                     <Image
@@ -95,7 +95,7 @@ function NavBarContent() {
                       width={40}
                       height={40}
                     />
-                  </button>
+                  </Link>
 
                   {/* Logout Button */}
                   <button
