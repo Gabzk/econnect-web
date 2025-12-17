@@ -97,6 +97,7 @@ export default function HighlightComponent({
         <div className="mb-8">
           <NewsCardComponent
             big={true}
+            priority={true}
             title={featuredNews.titulo}
             summary={featuredNews.resumo}
             imageUrl={featuredNews.imagem}

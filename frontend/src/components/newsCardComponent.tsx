@@ -12,6 +12,7 @@ type NewsCardComponentProps = {
   id: number;
   likes?: number;
   liked?: boolean;
+  priority?: boolean;
 };
 
 export default function NewsCardComponent({
@@ -24,6 +25,7 @@ export default function NewsCardComponent({
   id,
   likes = 0,
   liked = false,
+  priority = false,
 }: NewsCardComponentProps) {
   return (
     <div
@@ -37,6 +39,7 @@ export default function NewsCardComponent({
           alt={title ? title : "Imagem da Notícia"}
           width={big ? 600 : 400}
           height={big ? 400 : 250}
+          priority={priority}
           className={`object-cover w-full ${big ? "h-64 md:h-80" : "h-48"}`}
         />
       </div>
