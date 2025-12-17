@@ -9,15 +9,18 @@ export default function HomeComponent() {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold text-emerald-700 text-center mt-12">
-        Econnect
-      </h1>
-      <p className="text-lg text-gray-600 text-center mt-4">
-        Sua fonte confiável de notícias em um só lugar
-      </p>
+      <div className="px-4">
+        <h1 className="text-4xl font-bold text-emerald-700 text-center mt-12">
+          Econnect
+        </h1>
+        <p className="text-lg text-gray-600 text-center mt-4">
+          Sua fonte confiável de notícias em um só lugar
+        </p>
+      </div>
+
 
       {!isLoading && !isAuthenticated && (
-        <div className="text-center mt-8 mb-8">
+        <div className="text-center px-4 mt-8 mb-8">
           <div className="inline-block bg-amber-100 border-2 border-emerald-600 rounded-lg p-6 shadow-lg">
             <p className="text-emerald-800 font-semibold mb-4">
               Faça login para ter acesso completo às notícias e recursos
