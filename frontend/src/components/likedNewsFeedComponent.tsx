@@ -152,7 +152,7 @@ export default function LikedNewsFeedComponent({
       {!loading && !error && noticias.length > 0 && (
         <>
           {/* News Grid */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-3">
             {noticias.map((noticia) => (
               <div key={noticia.id} className="w-full">
                 <NewsCardComponent
